@@ -231,14 +231,14 @@ class _AboutSectionState extends State<AboutSection>
           height: responsive.isMobile ? 90 : 300,
         ),
 
-        // Just wrap your content with this:
-        const Stack(
-          children: [
-            NeuralNetworkBackground() // Background layer
-            // Your app content on top
-          ],
-        )
-        //! gap is here need to fill some goo d atmoshpoire wiht fluter ai ml tech softewe code like related good inrecton 3d environ ment
+        // Only show Neural Network on desktop/tablet
+        if (!responsive.isMobile)
+          const Stack(
+            children: [
+              NeuralNetworkBackground() // Background layer
+              // Your app content on top
+            ],
+          )
       ],
     );
   }
@@ -355,6 +355,17 @@ class _AboutSectionState extends State<AboutSection>
       children: [
         _buildIntroduction(responsive),
         SizedBox(height: responsive.contentSpacing),
+
+        // Show Neural Network at top of description on mobile
+        if (responsive.isMobile) ...[
+          const Stack(
+            children: [
+              NeuralNetworkBackground() // Background layer at top of description
+            ],
+          ),
+          SizedBox(height: responsive.contentSpacing),
+        ],
+
         _buildDescription(responsive),
         SizedBox(height: responsive.contentSpacing),
         _buildStatsSection(responsive),

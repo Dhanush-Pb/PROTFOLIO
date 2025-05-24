@@ -16,7 +16,7 @@ class NeuralNetworkPainter extends CustomPainter {
 
   void _drawNeuralLayer(Canvas canvas, Size size, double timeOffset,
       Color baseColor, int nodeCount) {
-    final paint = Paint()..strokeWidth = 2.5; // Increased line thickness
+    final paint = Paint()..strokeWidth = 4.0; // Increased line thickness
 
     // Generate random but consistent node positions
     final nodes = <Offset>[];
@@ -123,14 +123,50 @@ class _NeuralNetworkBackgroundState extends State<NeuralNetworkBackground>
     return SizedBox(
       width: double.infinity,
       height: widget.height ?? 850, // Set height to 850 pixels
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return CustomPaint(
-            painter: NeuralNetworkPainter(_controller.value),
-            child: Container(),
-          );
-        },
+      child: Stack(
+        children: [
+          // Neural network background
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: NeuralNetworkPainter(_controller.value),
+                child: Container(),
+              );
+            },
+          ),
+          // Text overlay at the top
+          Positioned(
+            top: 100,
+            left: 16,
+            right: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 150,
+                ),
+                Text(
+                  'Artificial Intelligence is revolutionizing the way we interact with technology and process information. Neural networks, inspired by the human brain, are capable of learning complex patterns and making intelligent decisions across various domains. From image recognition to natural language processing, these sophisticated algorithms are transforming industries and creating new possibilities for innovation.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Machine learning algorithms continuously evolve and adapt, becoming more efficient and accurate with each iteration. The interconnected nodes in neural networks mirror the synaptic connections in biological brains, processing vast amounts of data to extract meaningful insights. This technology enables computers to perform tasks that were once thought to be exclusively human, opening doors to unprecedented automation and intelligent assistance in our daily lives.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
