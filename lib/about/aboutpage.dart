@@ -353,9 +353,6 @@ class _AboutSectionState extends State<AboutSection>
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
       children: [
-        _buildIntroduction(responsive),
-        SizedBox(height: responsive.contentSpacing),
-
         // Show Neural Network at top of description on mobile
         if (responsive.isMobile) ...[
           const Stack(
@@ -365,6 +362,9 @@ class _AboutSectionState extends State<AboutSection>
           ),
           SizedBox(height: responsive.contentSpacing),
         ],
+        _buildIntroduction(responsive),
+
+        SizedBox(height: responsive.contentSpacing),
 
         _buildDescription(responsive),
         SizedBox(height: responsive.contentSpacing),

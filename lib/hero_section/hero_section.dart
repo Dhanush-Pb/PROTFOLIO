@@ -214,7 +214,7 @@ class _HeroSectionState extends State<HeroSection>
                           stops: [0.0, 0.3, 0.7, 1.0],
                         ).createShader(bounds),
                         child: Text(
-                          'Dhanush PB',
+                          'Dhanush',
                           style: GoogleFonts.poppins(
                             fontSize: isSmallMobile
                                 ? 28
