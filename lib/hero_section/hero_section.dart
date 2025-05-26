@@ -5,10 +5,13 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'dart:math' as math;
 
+import 'package:url_launcher/url_launcher.dart';
+
 class HeroSection extends StatefulWidget {
   final AnimationController floatingController;
-
-  const HeroSection({super.key, required this.floatingController});
+  final ScrollController? scrollController;
+   final GlobalKey? projectsKey;
+  const HeroSection({super.key, required this.floatingController, this.scrollController, this.projectsKey});
 
   @override
   State<HeroSection> createState() => _HeroSectionState();
@@ -51,6 +54,56 @@ class _HeroSectionState extends State<HeroSection>
     _particleController.dispose();
     super.dispose();
   }
+
+    void _scrollToProjects() {
+    if (widget.scrollController != null && widget.projectsKey != null) {
+      final context = widget.projectsKey!.currentContext;
+      if (context != null) {
+        Scrollable.ensureVisible(
+          context,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
+void _downloadCV() async {
+  try {
+    // Your Google Drive CV link
+    const String cvUrl = 'https://drive.google.com/file/d/1qkZ2rSehwZd8QJewFDUKYY2mjAAY2CiD/view?usp=sharing';
+    
+    // Show loading message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.open_in_new, color: Colors.white),
+            SizedBox(width: 8),
+            Text('Opening CV in Google Drive...'),
+          ],
+        ),
+        backgroundColor: Colors.blue,
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    // Open Google Drive link in browser/app
+    await launchUrl(
+      Uri.parse(cvUrl),
+      mode: LaunchMode.externalApplication, // Opens in external browser/app
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Unable to open CV. Please try again.'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      ),
+    );
+    print('Error opening CV: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -491,7 +544,7 @@ class _HeroSectionState extends State<HeroSection>
                 // Tech Stack Indicators
                 _buildTechStack(isMobile, isSmallMobile),
                 const SizedBox(height: 40),
-
+//!WORKING AREA
                 Wrap(
                   spacing: 16,
                   runSpacing: 16,
@@ -501,14 +554,18 @@ class _HeroSectionState extends State<HeroSection>
                     _buildGlowButton(
                       'Explore Projects',
                       Icons.rocket_launch,
-                      () {},
+                      () { 
+                        _scrollToProjects();
+                      },
                       isPrimary: true,
                       isSmallMobile: isSmallMobile,
                     ),
                     _buildGlowButton(
                       'Download CV',
                       Icons.cloud_download,
-                      () {},
+                      () { 
+                        _downloadCV();
+                      },
                       isPrimary: false,
                       isSmallMobile: isSmallMobile,
                     ),

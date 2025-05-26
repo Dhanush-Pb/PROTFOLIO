@@ -818,7 +818,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       ),
 
                       SizedBox(
-                          height: isMobile ? 16 : scrensize.height * 0.095),
+                          height: isMobile ? 11 : scrensize.height * 0.095),
 
                       // Action Buttons
                       Row(

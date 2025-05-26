@@ -137,32 +137,58 @@ class _NeuralNetworkBackgroundState extends State<NeuralNetworkBackground>
           ),
           // Text overlay at the top
           Positioned(
-            top: 100,
+            top: 60,
             left: 16,
             right: 16,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 150,
+                  height: 50,
                 ),
-                Text(
-                  'Artificial Intelligence is revolutionizing the way we interact with technology and process information. Neural networks, inspired by the human brain, are capable of learning complex patterns and making intelligent decisions across various domains. From image recognition to natural language processing, these sophisticated algorithms are transforming industries and creating new possibilities for innovation.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withOpacity(0.9),
-                    height: 1.5,
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Machine learning algorithms continuously evolve and adapt, becoming more efficient and accurate with each iteration. The interconnected nodes in neural networks mirror the synaptic connections in biological brains, processing vast amounts of data to extract meaningful insights. This technology enables computers to perform tasks that were once thought to be exclusively human, opening doors to unprecedented automation and intelligent assistance in our daily lives.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withOpacity(0.9),
-                    height: 1.5,
-                  ),
-                ),
+              Center(
+  child: Text(
+    'Relentless Growth',
+    style: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    textAlign: TextAlign.center,
+  ),
+),
+SizedBox(height: 30),
+Text(
+  'My journey has been driven by passion and hard work. Becoming a Software Engineer was not luck, but the result of continuous learning and pushing my limits.',
+  style: TextStyle(
+    fontSize: 16,
+    color: Colors.white.withOpacity(0.9),
+    height: 1.5,
+  ),
+  textAlign: TextAlign.center,
+),
+SizedBox(height: 16),
+Text(
+  'I chose to take risks and step outside my comfort zone because I believe true growth comes from facing challenges. Success is earned by those who dream big and work hard.',
+  style: TextStyle(
+    fontSize: 16,
+    color: Colors.white.withOpacity(0.9),
+    height: 1.5,
+  ),
+  textAlign: TextAlign.center,
+),
+SizedBox(height: 16),
+Text(
+  'Take risks, embrace challenges, and never stop pushing forward — that’s how real success is built.',
+  style: TextStyle(
+    fontSize: 16,
+    color: Colors.white.withOpacity(0.9),
+    height: 1.5,
+  ),
+  textAlign: TextAlign.center,
+),
+
+
               ],
             ),
           ),

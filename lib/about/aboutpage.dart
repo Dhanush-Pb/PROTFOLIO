@@ -286,29 +286,29 @@ class _AboutSectionState extends State<AboutSection>
         borderRadius: BorderRadius.circular(22),
         child: Stack(
           children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-              errorBuilder: (context, error, stackTrace) => Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color(0xFF667EEA).withOpacity(0.4),
-                      const Color(0xFF64B6FF).withOpacity(0.4),
-                    ],
-                  ),
-                ),
-                child: const Icon(
-                  Icons.person,
-                  size: 80,
-                  color: Colors.white70,
-                ),
-              ),
-            ),
+            // Image.network(
+            //   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face&auto=format&q=80',
+            //   fit: BoxFit.cover,
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   errorBuilder: (context, error, stackTrace) => Container(
+            //     decoration: BoxDecoration(
+            //       gradient: LinearGradient(
+            //         begin: Alignment.topLeft,
+            //         end: Alignment.bottomRight,
+            //         colors: [
+            //           const Color(0xFF667EEA).withOpacity(0.4),
+            //           const Color(0xFF64B6FF).withOpacity(0.4),
+            //         ],
+            //       ),
+            //     ),
+            //     child: const Icon(
+            //       Icons.person,
+            //       size: 80,
+            //       color: Colors.white70,
+            //     ),
+            //   ),
+            // ),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -386,6 +386,7 @@ class _AboutSectionState extends State<AboutSection>
               fontWeight: FontWeight.w600,
               color: Colors.white.withOpacity(0.9),
               letterSpacing: 0.5,
+
             ),
           ),
           TextSpan(
@@ -424,27 +425,30 @@ class _AboutSectionState extends State<AboutSection>
   Widget _buildDescription(_ResponsiveHelper responsive) {
     return Column(
       children: [
-        Text(
-          'Passionate software engineer specializing in Flutter development with 2+ years of experience building scalable mobile and web applications.',
-          style: GoogleFonts.inter(
-            fontSize: responsive.bodySize,
-            color: Colors.white.withOpacity(0.85),
-            height: 1.7,
-            letterSpacing: 0.2,
-          ),
-          textAlign: responsive.isMobile ? TextAlign.center : TextAlign.start,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'I excel at transforming complex requirements into elegant, user-focused solutions while collaborating seamlessly across cross-functional teams to deliver exceptional digital experiences.',
-          style: GoogleFonts.inter(
-            fontSize: responsive.bodySize,
-            color: Colors.white.withOpacity(0.85),
-            height: 1.7,
-            letterSpacing: 0.2,
-          ),
-          textAlign: responsive.isMobile ? TextAlign.center : TextAlign.start,
-        ),
+Text(
+  'Innovative software engineer with over 2 years of experience in Flutter development, building reliable and fast mobile and web applications.',
+  style: GoogleFonts.inter(
+    fontSize: responsive.bodySize,
+    color: Colors.white.withOpacity(0.85),
+    height: 1.7,
+    letterSpacing: 0.2,
+  ),
+  textAlign: responsive.isMobile ? TextAlign.center : TextAlign.start,
+),
+const SizedBox(height: 16),
+Text(
+  'I work closely with teams and lead efforts to create clear development paths, ensuring smooth collaboration and delivery. Experienced in handling projects across multiple domains, I focus on building scalable, user-friendly solutions that drive success.',
+  style: GoogleFonts.inter(
+    fontSize: responsive.bodySize,
+    color: Colors.white.withOpacity(0.85),
+    height: 1.7,
+    letterSpacing: 0.2,
+  ),
+  textAlign: responsive.isMobile ? TextAlign.center : TextAlign.start,
+),
+
+
+
       ],
     );
   }
@@ -700,7 +704,7 @@ class _AboutSectionState extends State<AboutSection>
           if (constraints.maxWidth < 500) {
             // Small mobile - 1 column
             crossAxisCount = 1;
-            childAspectRatio = 2.2; // reduced for more height
+            childAspectRatio = 1.9; // reduced for more height
           } else if (constraints.maxWidth < 800) {
             // Large mobile/small tablet
             crossAxisCount = 1;
@@ -1241,8 +1245,8 @@ class _ResponsiveHelper {
   }
 
   double get subtitleSize {
-    if (isSmallMobile) return 16;
-    if (isMobile) return 18;
+    if (isSmallMobile) return 18;
+    if (isMobile) return 19;
     if (isTablet) return 20;
     return 22;
   }
