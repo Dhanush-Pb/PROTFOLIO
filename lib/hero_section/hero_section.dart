@@ -141,17 +141,17 @@ void _downloadCV() async {
             padding: EdgeInsets.symmetric(
                 horizontal: isSmallMobile ? 16 : (isMobile ? 20 : 80)),
             child: isMobile
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Mobile: Show floating animation first
-                      _buildFloatingAnimation(size, isMobile, isSmallMobile),
-                      const SizedBox(height: 40),
-                      // Then show text content
-                      _buildTextContent(
-                          size, isMobile, isTablet, isSmallMobile),
-                    ],
-                  )
+    ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Mobile: Show floating animation first
+          _buildFloatingAnimation(size, isMobile, isSmallMobile),
+          const SizedBox(height: 40),
+          // Then show text content
+          _buildTextContent(size, isMobile, isTablet, isSmallMobile),
+          const SizedBox(height: 60), // Add extra bottom padding for mobile
+        ],
+      )
                 : Row(
                     children: [
                       Expanded(
@@ -545,32 +545,68 @@ void _downloadCV() async {
                 _buildTechStack(isMobile, isSmallMobile),
                 const SizedBox(height: 40),
 //!WORKING AREA
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  alignment:
-                      isMobile ? WrapAlignment.center : WrapAlignment.start,
-                  children: [
-                    _buildGlowButton(
-                      'Explore Projects',
-                      Icons.rocket_launch,
-                      () { 
-                        _scrollToProjects();
-                      },
-                      isPrimary: true,
-                      isSmallMobile: isSmallMobile,
-                    ),
-                    _buildGlowButton(
-                      'Download CV',
-                      Icons.cloud_download,
-                      () { 
-                        _downloadCV();
-                      },
-                      isPrimary: false,
-                      isSmallMobile: isSmallMobile,
-                    ),
-                  ],
-                ),
+               Container(
+  width: double.infinity,
+  child: Column(
+    crossAxisAlignment: isMobile ? CrossAxisAlignment.stretch : CrossAxisAlignment.start,
+    children: [
+      if (isMobile) ...[
+        // Mobile: Stack buttons vertically with full width
+        _buildGlowButton(
+          'Explore Projects',
+          Icons.rocket_launch,
+          () { 
+            _scrollToProjects();
+          },
+          isPrimary: true,
+          isSmallMobile: isSmallMobile,
+          isFullWidth: true,
+        ),
+        const SizedBox(height: 12),
+        _buildGlowButton(
+          'Download CV',
+          Icons.cloud_download,
+          () { 
+            _downloadCV();
+          },
+          isPrimary: false,
+          isSmallMobile: isSmallMobile,
+          isFullWidth: true,
+        ),
+      ] else ...[
+        // Desktop: Keep horizontal layout
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          alignment: WrapAlignment.start,
+          children: [
+            _buildGlowButton(
+              'Explore Projects',
+              Icons.rocket_launch,
+              () { 
+                _scrollToProjects();
+              },
+              isPrimary: true,
+              isSmallMobile: isSmallMobile,
+              isFullWidth: false,
+            ),
+            _buildGlowButton(
+              'Download CV',
+              Icons.cloud_download,
+              () { 
+                _downloadCV();
+              },
+              isPrimary: false,
+              isSmallMobile: isSmallMobile,
+              isFullWidth: false,
+            ),
+          ],
+        ),
+      ],
+    ],
+  ),
+),
+
               ],
             ),
           ),
@@ -746,131 +782,135 @@ void _downloadCV() async {
     );
   }
 
-  Widget _buildGlowButton(
-    String text,
-    IconData icon,
-    VoidCallback onTap, {
-    required bool isPrimary,
-    required bool isSmallMobile,
-    bool isSpecial = false,
-  }) {
-    bool isHovered = false;
-    bool isTapped = false;
+Widget _buildGlowButton(
+  String text,
+  IconData icon,
+  VoidCallback onTap, {
+  required bool isPrimary,
+  required bool isSmallMobile,
+  required bool isFullWidth,
+  bool isSpecial = false,
+}) {
+  bool isHovered = false;
+  bool isTapped = false;
 
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return MouseRegion(
-          onEnter: (_) => setState(() => isHovered = true),
-          onExit: (_) => setState(() => isHovered = false),
-          child: GestureDetector(
-            onTapDown: (_) => setState(() => isTapped = true),
-            onTapUp: (_) {
-              setState(() => isTapped = false);
-              HapticFeedback.lightImpact();
-              onTap();
-            },
-            onTapCancel: () => setState(() => isTapped = false),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              transform: Matrix4.identity()
-                ..scale(isTapped ? 0.95 : (isHovered ? 1.05 : 1.0)),
-              padding: EdgeInsets.symmetric(
-                horizontal: isSmallMobile ? 18 : 24,
-                vertical: isSmallMobile ? 10 : 12,
-              ),
-              decoration: BoxDecoration(
-                gradient: isPrimary
-                    ? LinearGradient(
-                        colors: isHovered
-                            ? [const Color(0xFF7C73FF), const Color(0xFF4F4CF4)]
-                            : [
-                                const Color(0xFF6C63FF),
-                                const Color(0xFF3F3CF4)
-                              ],
-                      )
-                    : isSpecial
-                        ? LinearGradient(
-                            colors: isHovered
-                                ? [
-                                    const Color(0xFFFF6B6B),
-                                    const Color(0xFFFF8E53)
-                                  ]
-                                : [
-                                    const Color(0xFFFF6B6B).withOpacity(0.1),
-                                    const Color(0xFFFF8E53).withOpacity(0.1)
-                                  ],
-                          )
-                        : null,
-                border: isPrimary || isSpecial
-                    ? null
-                    : Border.all(
-                        color: isHovered
-                            ? Colors.white.withOpacity(0.6)
-                            : Colors.white.withOpacity(0.3),
-                        width: isHovered ? 1.5 : 1.0,
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return MouseRegion(
+        onEnter: (_) => setState(() => isHovered = true),
+        onExit: (_) => setState(() => isHovered = false),
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => isTapped = true),
+          onTapUp: (_) {
+            setState(() => isTapped = false);
+            HapticFeedback.lightImpact();
+            onTap();
+          },
+          onTapCancel: () => setState(() => isTapped = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            width: isFullWidth ? double.infinity : null,
+            transform: Matrix4.identity()
+              ..scale(isTapped ? 0.95 : (isHovered ? 1.05 : 1.0)),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallMobile ? 18 : 24,
+              vertical: isSmallMobile ? 12 : 14, // Increased vertical padding for mobile
+            ),
+            decoration: BoxDecoration(
+              gradient: isPrimary
+                  ? LinearGradient(
+                      colors: isHovered
+                          ? [const Color(0xFF7C73FF), const Color(0xFF4F4CF4)]
+                          : [
+                              const Color(0xFF6C63FF),
+                              const Color(0xFF3F3CF4)
+                            ],
+                    )
+                  : isSpecial
+                      ? LinearGradient(
+                          colors: isHovered
+                              ? [
+                                  const Color(0xFFFF6B6B),
+                                  const Color(0xFFFF8E53)
+                                ]
+                              : [
+                                  const Color(0xFFFF6B6B).withOpacity(0.1),
+                                  const Color(0xFFFF8E53).withOpacity(0.1)
+                                ],
+                        )
+                      : null,
+              border: isPrimary || isSpecial
+                  ? null
+                  : Border.all(
+                      color: isHovered
+                          ? Colors.white.withOpacity(0.6)
+                          : Colors.white.withOpacity(0.3),
+                      width: isHovered ? 1.5 : 1.0,
+                    ),
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: isPrimary
+                  ? [
+                      BoxShadow(
+                        color: const Color(0xFF6C63FF)
+                            .withOpacity(isHovered ? 0.5 : 0.3),
+                        blurRadius: isHovered ? 20 : 15,
+                        offset: const Offset(0, 5),
+                        spreadRadius: isHovered ? 2 : 0,
                       ),
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: isPrimary
-                    ? [
-                        BoxShadow(
-                          color: const Color(0xFF6C63FF)
-                              .withOpacity(isHovered ? 0.5 : 0.3),
-                          blurRadius: isHovered ? 20 : 15,
-                          offset: const Offset(0, 5),
-                          spreadRadius: isHovered ? 2 : 0,
-                        ),
-                      ]
-                    : isSpecial
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFFFF6B6B)
-                                  .withOpacity(isHovered ? 0.4 : 0.2),
-                              blurRadius: isHovered ? 20 : 15,
-                              offset: const Offset(0, 5),
-                              spreadRadius: isHovered ? 2 : 0,
-                            ),
-                          ]
-                        : isHovered
-                            ? [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(0.2),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ]
-                            : null,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AnimatedDefaultTextStyle(
-                    duration: const Duration(milliseconds: 200),
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: isHovered ? FontWeight.w600 : FontWeight.w500,
-                      fontSize: isSmallMobile ? 13 : 14,
-                    ),
-                    child: Text(text),
+                    ]
+                  : isSpecial
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFFFF6B6B)
+                                .withOpacity(isHovered ? 0.4 : 0.2),
+                            blurRadius: isHovered ? 20 : 15,
+                            offset: const Offset(0, 5),
+                            spreadRadius: isHovered ? 2 : 0,
+                          ),
+                        ]
+                      : isHovered
+                          ? [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.2),
+                                blurRadius: 15,
+                                offset: const Offset(0, 5),
+                              ),
+                            ]
+                          : null,
+            ),
+            child: Row(
+              mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 200),
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: isHovered ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: isSmallMobile ? 14 : 15, // Slightly larger for mobile
                   ),
-                  const SizedBox(width: 8),
-                  AnimatedRotation(
-                    turns: isHovered ? 0.05 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: isSmallMobile ? 16 : 18,
-                    ),
+                  child: Text(text),
+                ),
+                const SizedBox(width: 8),
+                AnimatedRotation(
+                  turns: isHovered ? 0.05 : 0.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: isSmallMobile ? 18 : 20, // Slightly larger for mobile
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
 }
 
 // Custom Painters for Background Effects
