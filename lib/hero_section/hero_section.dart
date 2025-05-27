@@ -579,11 +579,12 @@ class _HeroSectionState extends State<HeroSection>
                     ),
                   ],
                 ),
-                 const SizedBox(height: 50),
+               
               ],
             ),
           ),
         ),
+          const SizedBox(height: 100),
       ],
     );
   }
