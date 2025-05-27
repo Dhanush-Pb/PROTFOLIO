@@ -205,8 +205,8 @@ class _PortfolioHomePageState extends State<PortfolioHomePage>
                       Container(
                         key: _heroKey,
                         child: HeroSection(
-                          scrollController: _scrollController,
-                          projectsKey: _projectsKey,
+                            scrollController: _scrollController,
+                            projectsKey: _projectsKey,
                             floatingController: _floatingController),
                       ),
                       Container(
