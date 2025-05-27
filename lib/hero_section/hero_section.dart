@@ -579,6 +579,7 @@ class _HeroSectionState extends State<HeroSection>
                     ),
                   ],
                 ),
+                 const SizedBox(height: 50),
               ],
             ),
           ),
