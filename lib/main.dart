@@ -34,6 +34,7 @@ class MyPortfolioApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0A0E27),
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
+      //! work done 
       home: const SplashScren(),
     );
   }
