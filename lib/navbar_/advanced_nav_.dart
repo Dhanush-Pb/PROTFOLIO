@@ -64,8 +64,8 @@ class _AdvancedNavbarState extends State<AdvancedNavbar>
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28, vertical: 20),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
