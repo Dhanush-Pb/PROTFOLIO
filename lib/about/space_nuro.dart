@@ -104,7 +104,7 @@ class SpaceNeuralNetworkPainter extends CustomPainter {
             final particleOpacity =
                 (math.sin(progress * math.pi) * finalOpacity).clamp(0.0, 1.0);
 
-            paint.color = Colors.white.withOpacity(particleOpacity);
+            paint.color = const Color(0xFFB0C4DE).withOpacity(particleOpacity);
             paint.style = PaintingStyle.fill;
             canvas.drawCircle(particlePos, 1.0, paint);
           }
@@ -112,35 +112,35 @@ class SpaceNeuralNetworkPainter extends CustomPainter {
       }
     }
 
-    // Draw enhanced nodes with multiple layers
+    // Draw enhanced nodes with multiple layers - REDUCED SIZES
     for (int i = 0; i < nodes.length; i++) {
       final pulseSize =
-          3 + (math.sin(animationValue * 3 + timeOffset + i * 0.4) + 1) * 3;
+          1.5 + (math.sin(animationValue * 3 + timeOffset + i * 0.4) + 1) * 1.5;
       final coreOpacity = (0.6 +
               (math.sin(animationValue * 2.5 + timeOffset + i * 0.9) + 1) * 0.4)
           .clamp(0.0, 1.0);
 
-      // Outer glow ring
+      // Outer glow ring - REDUCED SIZE
       if (hasGlow) {
         paint.color =
             baseColor.withOpacity((coreOpacity * 0.2).clamp(0.0, 1.0));
         paint.style = PaintingStyle.fill;
-        paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 6.0);
-        canvas.drawCircle(nodes[i], pulseSize + 8, paint);
+        paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+        canvas.drawCircle(nodes[i], pulseSize + 4, paint);
         paint.maskFilter = null;
       }
 
-      // Middle ring
+      // Middle ring - REDUCED SIZE
       paint.color = baseColor.withOpacity((coreOpacity * 0.5).clamp(0.0, 1.0));
-      canvas.drawCircle(nodes[i], pulseSize + 2, paint);
+      canvas.drawCircle(nodes[i], pulseSize + 1, paint);
 
-      // Core node
-      paint.color = Colors.white.withOpacity(coreOpacity);
+      // Core node - MOODY COLOR
+      paint.color = const Color(0xFF8A9BA8).withOpacity(coreOpacity);
       canvas.drawCircle(nodes[i], pulseSize * 0.6, paint);
 
-      // Inner bright spot
-      paint.color = Colors.white.withOpacity(1.0);
-      canvas.drawCircle(nodes[i], pulseSize * 0.2, paint);
+      // Inner bright spot - MOODY COLOR & REDUCED SIZE
+      paint.color = const Color(0xFFB0C4DE).withOpacity(0.8);
+      canvas.drawCircle(nodes[i], pulseSize * 0.15, paint);
     }
   }
 

@@ -51,73 +51,75 @@ class _AdvancedNavbarState extends State<AdvancedNavbar>
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 768;
 
-    return AnimatedBuilder(
-      animation: _scaleAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: Container(
-            margin: const EdgeInsets.all(20),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(0.15),
-                        Colors.white.withOpacity(0.05),
+    return SafeArea(
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.white.withOpacity(0.15),
+                          Colors.white.withOpacity(0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(
+                        width: 1.5,
+                        color: Colors.white.withOpacity(0.25),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, -2),
+                          spreadRadius: 0,
+                        ),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(
-                      width: 1.5,
-                      color: Colors.white.withOpacity(0.25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildLogo(),
+                        if (!isMobile)
+                          Row(
+                            children: [
+                              _buildNavItem('Home', 0, Icons.home_rounded),
+                              _buildNavItem('About', 1, Icons.person_rounded),
+                              _buildNavItem('Projects', 2, Icons.work_rounded),
+                              _buildNavItem(
+                                  'Contact', 4, Icons.contact_mail_rounded),
+                            ],
+                          )
+                        else
+                          _buildMobileMenuButton(context),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                        spreadRadius: 0,
-                      ),
-                      BoxShadow(
-                        color: Colors.white.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, -2),
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildLogo(),
-                      if (!isMobile)
-                        Row(
-                          children: [
-                            _buildNavItem('Home', 0, Icons.home_rounded),
-                            _buildNavItem('About', 1, Icons.person_rounded),
-                            _buildNavItem('Projects', 2, Icons.work_rounded),
-                            _buildNavItem(
-                                'Contact', 4, Icons.contact_mail_rounded),
-                          ],
-                        )
-                      else
-                        _buildMobileMenuButton(context),
-                    ],
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

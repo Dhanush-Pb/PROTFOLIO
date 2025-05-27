@@ -268,7 +268,12 @@ class _ContactSectionState extends State<ContactSection>
                           children: [
                             _buildSocialButton(
                               Icons.work,
-                              () => _launchLinkedIn(),
+                              () async {
+                                final url = Uri.parse(
+                                    'https://www.linkedin.com/in/dhanush-pb/');
+                                await launchUrl(url,
+                                    mode: LaunchMode.externalApplication);
+                              },
                               'LinkedIn',
                             ),
                             const SizedBox(width: 15), // Reduced spacing

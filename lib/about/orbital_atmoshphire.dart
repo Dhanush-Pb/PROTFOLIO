@@ -146,49 +146,57 @@ class _NeuralNetworkBackgroundState extends State<NeuralNetworkBackground>
                 SizedBox(
                   height: 50,
                 ),
-              Center(
-  child: Text(
-    'Relentless Growth',
-    style: TextStyle(
-      fontSize: 22,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    textAlign: TextAlign.center,
-  ),
-),
-SizedBox(height: 30),
-Text(
-  'My journey has been driven by passion and hard work. Becoming a Software Engineer was not luck, but the result of continuous learning and pushing my limits.',
-  style: TextStyle(
-    fontSize: 16,
-    color: Colors.white.withOpacity(0.9),
-    height: 1.5,
-  ),
-  textAlign: TextAlign.center,
-),
-SizedBox(height: 16),
-Text(
-  'I chose to take risks and step outside my comfort zone because I believe true growth comes from facing challenges. Success is earned by those who dream big and work hard.',
-  style: TextStyle(
-    fontSize: 16,
-    color: Colors.white.withOpacity(0.9),
-    height: 1.5,
-  ),
-  textAlign: TextAlign.center,
-),
-SizedBox(height: 16),
-Text(
-  'Take risks, embrace challenges, and never stop pushing forward — that’s how real success is built.',
-  style: TextStyle(
-    fontSize: 16,
-    color: Colors.white.withOpacity(0.9),
-    height: 1.5,
-  ),
-  textAlign: TextAlign.center,
-),
-
-
+                Center(
+                  child: Text(
+                    'Relentless Growth',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 30),
+                Text(
+                  'My journey has been driven by passion and relentless hard work. Becoming a Software Engineer wasn’t a matter of chance — it was the result of consistent learning and unwavering determination.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'I chose to step beyond my comfort zone because I believe true growth comes from facing challenges head-on. Success belongs to those who dare to dream big and put in the effort to make it real.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Balancing responsibilities while continuously learning wasn’t easy, but every moment invested added to my strength. This commitment shaped me into the developer I am today.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Take risks, embrace the unknown, and keep pushing forward — that’s how real success is built.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),

@@ -8,8 +8,16 @@ import 'package:portfolio/hero_section/hero_section.dart';
 import 'package:portfolio/projects/project_section_.dart';
 import 'package:portfolio/prot_content/proftoiosecon.dart';
 import 'package:portfolio/navbar_/advanced_nav_.dart';
+import 'package:portfolio/splash_scren.dart';
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+    // Lock orientation to portrait for mobile devices
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  
   runApp(const MyPortfolioApp());
 }
 
@@ -26,7 +34,7 @@ class MyPortfolioApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0A0E27),
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
-      home: const PortfolioHomePage(),
+      home: const SplashScren(),
     );
   }
 }
