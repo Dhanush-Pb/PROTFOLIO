@@ -11,13 +11,13 @@ import 'package:portfolio/navbar_/advanced_nav_.dart';
 import 'package:portfolio/splash_scren.dart';
 
 void main() {
-   WidgetsFlutterBinding.ensureInitialized();
-    // Lock orientation to portrait for mobile devices
+  WidgetsFlutterBinding.ensureInitialized();
+  // Lock orientation to portrait for mobile devices
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   runApp(const MyPortfolioApp());
 }
 
@@ -36,7 +36,6 @@ class MyPortfolioApp extends StatelessWidget {
       ),
       //! work done jkfskajflksaf
 
-      
       home: const SplashScren(),
     );
   }
