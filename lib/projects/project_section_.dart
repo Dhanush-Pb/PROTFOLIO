@@ -272,31 +272,32 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     final isMobile = size.width < 768;
 
     return SingleChildScrollView(
-      padding:
-          EdgeInsets.symmetric(horizontal: isMobile ? 20 : 80, vertical: 60),
+      padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 16 : 80, vertical: isMobile ? 30 : 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Enhanced Section Header
+          // Enhanced Section Header - Mobile Optimized
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(isMobile ? 12 : 16),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFF6C63FF), Color(0xFF3F3CF4)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
                       boxShadow: [
                         BoxShadow(
                           color: const Color(0xFF6C63FF).withOpacity(0.4),
-                          blurRadius: 25,
-                          spreadRadius: 3,
+                          blurRadius: isMobile ? 15 : 25,
+                          spreadRadius: isMobile ? 2 : 3,
                           offset: const Offset(0, 8),
                         ),
                       ],
@@ -304,42 +305,41 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                     child: Icon(
                       Icons.work_outline,
                       color: Colors.white,
-                      size: isMobile ? 28 : 36,
+                      size: isMobile ? 24 : 36,
                     ),
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: isMobile ? 12 : 20),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'My Projects ',
+                          'My Projects',
                           style: GoogleFonts.poppins(
-                            fontSize: isMobile ? 28 : 42,
+                            fontSize: isMobile ? 24 : 42,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             height: 1.1,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: isMobile ? 4 : 8),
                         Text(
                           'Crafting digital experiences & innovative solutions',
                           style: GoogleFonts.poppins(
-                            fontSize: isMobile ? 14 : 18,
+                            fontSize: isMobile ? 12 : 18,
                             color: Colors.white.withOpacity(0.7),
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        const SizedBox(height: 12),
                       ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: isMobile ? 16 : 20),
               Container(
-                height: 6,
-                width: 150,
+                height: 4,
+                width: isMobile ? 100 : 150,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [
@@ -348,12 +348,12 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                       Color(0xFF00B4D8)
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(3),
+                  borderRadius: BorderRadius.circular(2),
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0xFF6C63FF).withOpacity(0.6),
-                      blurRadius: 12,
-                      spreadRadius: 2,
+                      blurRadius: isMobile ? 8 : 12,
+                      spreadRadius: isMobile ? 1 : 2,
                     ),
                   ],
                 ),
@@ -361,14 +361,15 @@ class _ProjectsSectionState extends State<ProjectsSection> {
             ],
           ),
 
-          const SizedBox(height: 50),
+          SizedBox(height: isMobile ? 30 : 50),
 
-          // Enhanced Category Tabs
+          // Category Tabs - Mobile Optimized
           SizedBox(
-            height: 65,
+            height: isMobile ? 50 : 65,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
+                SizedBox(width: isMobile ? 8 : 0), // Add some padding on mobile
                 _buildCategoryTab(
                     context, 'All', Icons.dashboard, selectedCategory == 'All'),
                 _buildCategoryTab(context, 'Professional',
@@ -377,36 +378,39 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                     selectedCategory == 'Open Source'),
                 _buildCategoryTab(context, 'Mini Projects', Icons.lightbulb,
                     selectedCategory == 'Mini Projects'),
+                SizedBox(width: isMobile ? 8 : 0), // Add some padding on mobile
               ],
             ),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: isMobile ? 24 : 40),
 
           // Projects Count
-          Text(
-            ' ${selectedCategory == 'All' ? 'All' : selectedCategory} Projects',
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              color: Colors.white.withOpacity(0.7),
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 0),
+            child: Text(
+              '${filteredProjects.length} ${selectedCategory == 'All' ? 'All' : selectedCategory} Projects',
+              style: GoogleFonts.poppins(
+                fontSize: isMobile ? 14 : 16,
+                color: Colors.white.withOpacity(0.7),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
 
-          const SizedBox(height: 30),
+          SizedBox(height: isMobile ? 16 : 30),
 
-          // Projects Grid with Staggered Animation
+          // Projects Grid with Staggered Animation - Mobile Optimized
           AnimationLimiter(
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: isMobile ? 1 : (size.width > 1400 ? 3 : 2),
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                childAspectRatio: isMobile
-                    ? 0.85
-                    : 0.75, // Fixed aspect ratio for better space
+                crossAxisSpacing: isMobile ? 12 : 20,
+                mainAxisSpacing: isMobile ? 12 : 20,
+                childAspectRatio:
+                    isMobile ? 3.2 : 0.75, // Fixed ratio for mobile cheat cards
               ),
               itemCount: filteredProjects.length,
               itemBuilder: (context, index) {
@@ -415,7 +419,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                   duration: const Duration(milliseconds: 600),
                   columnCount: isMobile ? 1 : (size.width > 1400 ? 3 : 2),
                   child: SlideAnimation(
-                    verticalOffset: 60.0,
+                    verticalOffset: isMobile ? 40.0 : 60.0,
                     child: FadeInAnimation(
                       child: ProjectCard(
                         project: filteredProjects[index],
@@ -426,6 +430,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                             ? () =>
                                 _launchUrl(filteredProjects[index]['liveUrl'])
                             : null,
+                        isMobile: isMobile,
                       ),
                     ),
                   ),
@@ -438,40 +443,16 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     );
   }
 
-  Widget _buildStatChip(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: Colors.white.withOpacity(0.8)),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.white.withOpacity(0.8),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCategoryTab(BuildContext context, String title, IconData icon,
       [bool isActive = false]) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     return GestureDetector(
       onTap: () => _filterProjects(title),
       child: Container(
-        margin: const EdgeInsets.only(right: 15),
+        margin: EdgeInsets.only(right: isMobile ? 8 : 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(isMobile ? 14 : 18),
           gradient: isActive
               ? const LinearGradient(
                   colors: [Color(0xFF6C63FF), Color(0xFF3F3CF4)],
@@ -489,29 +470,30 @@ class _ProjectsSectionState extends State<ProjectsSection> {
               ? [
                   BoxShadow(
                     color: const Color(0xFF6C63FF).withOpacity(0.4),
-                    blurRadius: 20,
-                    spreadRadius: 2,
+                    blurRadius: isMobile ? 15 : 20,
+                    spreadRadius: isMobile ? 1 : 2,
                     offset: const Offset(0, 4),
                   ),
                 ]
               : null,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : 24, vertical: isMobile ? 10 : 16),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 20,
+              size: isMobile ? 18 : 20,
               color: isActive ? Colors.white : Colors.white.withOpacity(0.7),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: isMobile ? 6 : 10),
             Text(
               title,
               style: GoogleFonts.poppins(
                 color: isActive ? Colors.white : Colors.white.withOpacity(0.7),
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                fontSize: 15,
+                fontSize: isMobile ? 13 : 15,
               ),
             ),
           ],
@@ -526,6 +508,7 @@ class ProjectCard extends StatefulWidget {
   final int index;
   final VoidCallback onTap;
   final VoidCallback? onLiveTap;
+  final bool isMobile;
 
   const ProjectCard({
     super.key,
@@ -533,6 +516,7 @@ class ProjectCard extends StatefulWidget {
     required this.index,
     required this.onTap,
     this.onLiveTap,
+    required this.isMobile,
   });
 
   @override
@@ -542,11 +526,523 @@ class ProjectCard extends StatefulWidget {
 class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
 
+  void _showProjectDetails() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.8,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  widget.project['color'].withOpacity(0.15),
+                  widget.project['color'].withOpacity(0.08),
+                  Colors.black.withOpacity(0.6),
+                ],
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.project['color'].withOpacity(0.3),
+                  blurRadius: 30,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                // Header with close button
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              widget.project['color'].withOpacity(0.3),
+                              widget.project['color'].withOpacity(0.2),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: widget.project['color'].withOpacity(0.4),
+                          ),
+                        ),
+                        child: Icon(
+                          widget.project['icon'],
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.project['title'],
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    widget.project['color'].withOpacity(0.25),
+                                    widget.project['color'].withOpacity(0.15),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color:
+                                      widget.project['color'].withOpacity(0.5),
+                                ),
+                              ),
+                              child: Text(
+                                widget.project['type'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Scrollable content
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Platform and Download Count
+                        Row(
+                          children: [
+                            Icon(
+                              widget.project['platform'] == 'GitHub'
+                                  ? Icons.code
+                                  : Icons.store,
+                              size: 16,
+                              color: widget.project['color'],
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              widget.project['platform'],
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: widget.project['color'],
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Description
+                        Text(
+                          'Description',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.project['description'],
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: Colors.white.withOpacity(0.85),
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Key Features
+                        Text(
+                          'Key Features',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        ...(widget.project['features'] as List<String>)
+                            .map((feature) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 6,
+                                        height: 6,
+                                        margin: const EdgeInsets.only(top: 8),
+                                        decoration: BoxDecoration(
+                                          color: widget.project['color'],
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          feature,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 13,
+                                            color:
+                                                Colors.white.withOpacity(0.8),
+                                            height: 1.4,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+
+                        const SizedBox(height: 24),
+
+                        // Technologies
+                        Text(
+                          'Technologies Used',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: (widget.project['technologies']
+                                  as List<String>)
+                              .map((tech) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          widget.project['color']
+                                              .withOpacity(0.2),
+                                          widget.project['color']
+                                              .withOpacity(0.1),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: widget.project['color']
+                                            .withOpacity(0.4),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      tech,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Action Buttons
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                widget.project['color'],
+                                widget.project['color'].withOpacity(0.8),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: widget.project['color'].withOpacity(0.4),
+                                blurRadius: 12,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                widget.onTap();
+                              },
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      widget.project['platform'] == 'GitHub'
+                                          ? Icons.code
+                                          : Icons.store,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      widget.project['platform'] == 'GitHub'
+                                          ? 'View Code'
+                                          : widget.project['platform'] ==
+                                                  'pub.dev'
+                                              ? 'View Package'
+                                              : 'View App',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (widget.onLiveTap != null) ...[
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.3),
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  widget.onLiveTap!();
+                                },
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.launch,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'Live Demo',
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    final scrensize = MediaQuery.of(context).size;
+    // For mobile, show compact card
+    if (widget.isMobile) {
+      return MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTap: _showProjectDetails, // Show popup on tap
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: 120, // Fixed small height
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  widget.project['color'].withOpacity(0.15),
+                  widget.project['color'].withOpacity(0.08),
+                  Colors.black.withOpacity(0.4),
+                ],
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(_isHovered ? 0.3 : 0.2),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.project['color']
+                      .withOpacity(_isHovered ? 0.3 : 0.15),
+                  blurRadius: _isHovered ? 20 : 15,
+                  spreadRadius: _isHovered ? 2 : 1,
+                  offset: Offset(0, _isHovered ? 6 : 4),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Icon
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          widget.project['color'].withOpacity(0.3),
+                          widget.project['color'].withOpacity(0.2),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: widget.project['color'].withOpacity(0.4),
+                      ),
+                    ),
+                    child: Icon(
+                      widget.project['icon'],
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.project['title'],
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.project['description'],
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            color: Colors.white.withOpacity(0.8),
+                            height: 1.3,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        // Platform badge
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: widget.project['color'].withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: widget.project['color'].withOpacity(0.4),
+                            ),
+                          ),
+                          child: Text(
+                            widget.project['type'],
+                            style: GoogleFonts.poppins(
+                              fontSize: 9,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Arrow icon
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white.withOpacity(0.6),
+                    size: 16,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
+    // For desktop, show full card (your existing desktop code)
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -590,7 +1086,6 @@ class _ProjectCardState extends State<ProjectCard> {
             ),
             child: Stack(
               children: [
-                // Animated background pattern
                 Positioned(
                   top: -60,
                   right: -60,
@@ -610,12 +1105,10 @@ class _ProjectCardState extends State<ProjectCard> {
                     ),
                   ),
                 ),
-
                 Padding(
-                  padding: EdgeInsets.all(isMobile ? 16 : 24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       // Header Row
                       Row(
@@ -645,7 +1138,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             child: Icon(
                               widget.project['icon'],
                               color: Colors.white,
-                              size: isMobile ? 22 : 26,
+                              size: 26,
                             ),
                           ),
                           const Spacer(),
@@ -667,7 +1160,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             child: Text(
                               widget.project['type'],
                               style: GoogleFonts.poppins(
-                                fontSize: isMobile ? 10 : 11,
+                                fontSize: 11,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -676,13 +1169,13 @@ class _ProjectCardState extends State<ProjectCard> {
                         ],
                       ),
 
-                      SizedBox(height: isMobile ? 12 : 20),
+                      const SizedBox(height: 20),
 
                       // Project Title
                       Text(
                         widget.project['title'],
                         style: GoogleFonts.poppins(
-                          fontSize: isMobile ? 16 : 20,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           height: 1.2,
@@ -691,7 +1184,7 @@ class _ProjectCardState extends State<ProjectCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      SizedBox(height: isMobile ? 8 : 12),
+                      const SizedBox(height: 12),
 
                       // Platform Row
                       Row(
@@ -700,53 +1193,71 @@ class _ProjectCardState extends State<ProjectCard> {
                             widget.project['platform'] == 'GitHub'
                                 ? Icons.code
                                 : Icons.store,
-                            size: isMobile ? 14 : 16,
+                            size: 16,
                             color: widget.project['color'],
                           ),
-                          SizedBox(width: isMobile ? 4 : 6),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               widget.project['platform'],
                               style: GoogleFonts.poppins(
-                                fontSize: isMobile ? 12 : 13,
+                                fontSize: 13,
                                 color: widget.project['color'],
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
+                          if (widget.project['downloadCount'] != 'N/A')
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.download,
+                                  size: 14,
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.project['downloadCount'],
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    color: Colors.white.withOpacity(0.7),
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
 
-                      SizedBox(height: isMobile ? 12 : 16),
+                      const SizedBox(height: 16),
 
                       // Project Description
                       Text(
                         widget.project['description'],
                         style: GoogleFonts.poppins(
-                          fontSize: isMobile ? 12 : 13,
+                          fontSize: 13,
                           color: Colors.white.withOpacity(0.85),
                           height: 1.4,
                         ),
-                        maxLines: isMobile ? 3 : 4,
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      SizedBox(height: isMobile ? 12 : 16),
+                      const SizedBox(height: 16),
 
                       // Key Features
                       Text(
                         'Key Features:',
                         style: GoogleFonts.poppins(
-                          fontSize: isMobile ? 11 : 12,
+                          fontSize: 12,
                           color: Colors.white.withOpacity(0.7),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: isMobile ? 6 : 8),
+                      const SizedBox(height: 8),
 
-                      // Features List with proper spacing
+                      // Features List
                       ...((widget.project['features'] as List<String>)
-                          .take(isMobile ? 3 : 4)
+                          .take(4)
                           .map((feature) => Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
                                 child: Row(
@@ -761,12 +1272,12 @@ class _ProjectCardState extends State<ProjectCard> {
                                         shape: BoxShape.circle,
                                       ),
                                     ),
-                                    SizedBox(width: isMobile ? 6 : 8),
+                                    const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         feature,
                                         style: GoogleFonts.poppins(
-                                          fontSize: isMobile ? 10 : 11,
+                                          fontSize: 11,
                                           color: Colors.white.withOpacity(0.8),
                                           height: 1.3,
                                         ),
@@ -776,56 +1287,56 @@ class _ProjectCardState extends State<ProjectCard> {
                                     ),
                                   ],
                                 ),
-                              ))).toList(),
+                              ))
+                          .toList()),
 
-                      SizedBox(height: isMobile ? 12 : 16),
+                      const SizedBox(height: 16),
 
-                      // Technologies with proper wrapping
+                      // Technologies
                       Wrap(
                         spacing: 6,
                         runSpacing: 6,
-                        children: (widget.project['technologies']
-                                as List<String>)
-                            .take(isMobile ? 4 : 6) // Limit technologies shown
-                            .map((tech) => Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        widget.project['color']
-                                            .withOpacity(0.15),
-                                        widget.project['color']
-                                            .withOpacity(0.08),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: widget.project['color']
-                                          .withOpacity(0.4),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    tech,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: isMobile ? 10 : 11,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
+                        children:
+                            (widget.project['technologies'] as List<String>)
+                                .take(6)
+                                .map((tech) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            widget.project['color']
+                                                .withOpacity(0.15),
+                                            widget.project['color']
+                                                .withOpacity(0.08),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: widget.project['color']
+                                              .withOpacity(0.4),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        tech,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
                       ),
 
-                      SizedBox(
-                          height: isMobile ? 11 : scrensize.height * 0.095),
+                      const Spacer(),
 
                       // Action Buttons
                       Row(
                         children: [
                           Expanded(
                             child: Container(
-                              height: isMobile ? 38 : 42,
+                              height: 42,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
@@ -861,9 +1372,9 @@ class _ProjectCardState extends State<ProjectCard> {
                                               ? Icons.code
                                               : Icons.store,
                                           color: Colors.white,
-                                          size: isMobile ? 16 : 18,
+                                          size: 18,
                                         ),
-                                        SizedBox(width: isMobile ? 6 : 8),
+                                        const SizedBox(width: 8),
                                         Text(
                                           widget.project['platform'] == 'GitHub'
                                               ? 'View Code'
@@ -885,10 +1396,10 @@ class _ProjectCardState extends State<ProjectCard> {
                             ),
                           ),
                           if (widget.onLiveTap != null) ...[
-                            SizedBox(width: isMobile ? 8 : 12),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Container(
-                                height: isMobile ? 38 : 42,
+                                height: 42,
                                 decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(12),
@@ -907,18 +1418,18 @@ class _ProjectCardState extends State<ProjectCard> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.launch,
                                             color: Colors.white,
-                                            size: isMobile ? 16 : 18,
+                                            size: 18,
                                           ),
-                                          SizedBox(width: isMobile ? 6 : 8),
+                                          const SizedBox(width: 8),
                                           Text(
                                             'Live Demo',
                                             style: GoogleFonts.poppins(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
-                                              fontSize: isMobile ? 12 : 13,
+                                              fontSize: 13,
                                             ),
                                           ),
                                         ],

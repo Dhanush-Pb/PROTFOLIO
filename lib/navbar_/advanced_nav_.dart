@@ -1,4 +1,5 @@
 // Enhanced Advanced Navbar with premium glassmorphism effect
+// Hidden on mobile devices
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
@@ -51,6 +52,11 @@ class _AdvancedNavbarState extends State<AdvancedNavbar>
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 768;
 
+    // Return empty container (invisible) on mobile
+    if (isMobile) {
+      return const SizedBox.shrink();
+    }
+
     return SafeArea(
       child: AnimatedBuilder(
         animation: _scaleAnimation,
@@ -99,18 +105,15 @@ class _AdvancedNavbarState extends State<AdvancedNavbar>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildLogo(),
-                        if (!isMobile)
-                          Row(
-                            children: [
-                              _buildNavItem('Home', 0, Icons.home_rounded),
-                              _buildNavItem('About', 1, Icons.person_rounded),
-                              _buildNavItem('Projects', 2, Icons.work_rounded),
-                              _buildNavItem(
-                                  'Contact', 4, Icons.contact_mail_rounded),
-                            ],
-                          )
-                        else
-                          _buildMobileMenuButton(context),
+                        Row(
+                          children: [
+                            _buildNavItem('Home', 0, Icons.home_rounded),
+                            _buildNavItem('About', 1, Icons.person_rounded),
+                            _buildNavItem('Projects', 2, Icons.work_rounded),
+                            _buildNavItem(
+                                'Contact', 4, Icons.contact_mail_rounded),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -246,143 +249,6 @@ class _AdvancedNavbarState extends State<AdvancedNavbar>
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileMenuButton(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.2),
-            Colors.white.withOpacity(0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.3),
-          width: 1,
-        ),
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.menu_rounded, color: Colors.white, size: 24),
-        onPressed: () => _showMobileMenu(context),
-      ),
-    );
-  }
-
-  void _showMobileMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0xFF1A1A2E).withOpacity(0.95),
-                  const Color(0xFF16213E).withOpacity(0.98),
-                ],
-              ),
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(25)),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.1),
-                width: 1,
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 50,
-                  height: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.white.withOpacity(0.5),
-                        Colors.white.withOpacity(0.2),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ...[
-                  ('Home', 0, Icons.home_rounded),
-                  ('About', 1, Icons.person_rounded),
-                  ('Projects', 2, Icons.work_rounded),
-                  ('Contact', 4, Icons.contact_mail_rounded),
-                ].map((item) => Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 6),
-                      decoration: BoxDecoration(
-                        gradient: widget.currentSection == item.$2
-                            ? LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  const Color(0xFF6C63FF).withOpacity(0.2),
-                                  const Color(0xFF3F3CF4).withOpacity(0.1),
-                                ],
-                              )
-                            : null,
-                        borderRadius: BorderRadius.circular(16),
-                        border: widget.currentSection == item.$2
-                            ? Border.all(
-                                color: const Color(0xFF6C63FF).withOpacity(0.3),
-                                width: 1,
-                              )
-                            : null,
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 8),
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                const Color(0xFF6C63FF).withOpacity(0.3),
-                                const Color(0xFF3F3CF4).withOpacity(0.2),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(item.$3, color: Colors.white, size: 22),
-                        ),
-                        title: Text(
-                          item.$1,
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: widget.currentSection == item.$2
-                                ? FontWeight.w600
-                                : FontWeight.w500,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                        onTap: () {
-                          widget.onSectionTap(item.$2);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )),
-                const SizedBox(height: 30),
-              ],
-            ),
           ),
         ),
       ),
