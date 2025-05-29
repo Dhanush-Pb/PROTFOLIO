@@ -111,7 +111,8 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   @override
-// CHANGE 1: Update the main Container to use SingleChildScrollView for mobile
+
+// CHANGE 1: Remove SingleChildScrollView to allow main page scrolling
 Widget build(BuildContext context) {
   final size = MediaQuery.of(context).size;
   final isMobile = size.width < 768;
@@ -119,7 +120,8 @@ Widget build(BuildContext context) {
   final isSmallMobile = size.width < 480;
 
   return Container(
-    height: size.height,
+    // CHANGED: Remove fixed height to allow content to flow naturally
+    constraints: BoxConstraints(minHeight: size.height),
     decoration: BoxDecoration(
       gradient: RadialGradient(
         center: const Alignment(0.3, -0.5),
@@ -142,52 +144,49 @@ Widget build(BuildContext context) {
         // Neural Network Lines
         _buildNeuralNetwork(size),
 
-        // CHANGED: Wrap main content in SingleChildScrollView for mobile
-        isMobile 
-          ? SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Container(
-                constraints: BoxConstraints(minHeight: size.height),
-                child: _buildMainContent(size, isMobile, isTablet, isSmallMobile),
-              ),
-            )
-          : _buildMainContent(size, isMobile, isTablet, isSmallMobile),
+        // CHANGED: Direct main content without SingleChildScrollView
+        _buildMainContent(size, isMobile, isTablet, isSmallMobile),
       ],
     ),
   );
 }
-// CHANGE 2: Extract main content into separate method with better spacing
+// CHANGE 2: Adjust main content method for better mobile layout
 Widget _buildMainContent(Size size, bool isMobile, bool isTablet, bool isSmallMobile) {
   return Padding(
     padding: EdgeInsets.only(
       left: isSmallMobile ? 16 : (isMobile ? 20 : 80),
       right: isSmallMobile ? 16 : (isMobile ? 20 : 80),
-      top: isMobile ? 40 : 0, // Add top padding for mobile
-      bottom: isMobile ? 60 : 0, // Add bottom padding for mobile
+      top: isMobile ? 60 : 0, // Increased top padding for mobile
+      bottom: isMobile ? 80 : 0, // Increased bottom padding for mobile
     ),
-    child: isMobile
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Mobile: Show floating animation first
-              _buildFloatingAnimation(size, isMobile, isSmallMobile),
-              SizedBox(height: isSmallMobile ? 30 : 40),
-              // Then show text content
-              _buildTextContent(size, isMobile, isTablet, isSmallMobile),
-            ],
-          )
-        : Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: _buildTextContent(size, isMobile, isTablet, isSmallMobile),
-              ),
-              Expanded(
-                flex: 2,
-                child: _buildFloatingAnimation(size, isMobile, isSmallMobile),
-              ),
-            ],
-          ),
+    child: Container(
+      constraints: BoxConstraints(
+        minHeight: isMobile ? size.height - 140 : size.height, // Account for padding
+      ),
+      child: isMobile
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Mobile: Show floating animation first
+                _buildFloatingAnimation(size, isMobile, isSmallMobile),
+                SizedBox(height: isSmallMobile ? 30 : 40),
+                // Then show text content
+                _buildTextContent(size, isMobile, isTablet, isSmallMobile),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: _buildTextContent(size, isMobile, isTablet, isSmallMobile),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: _buildFloatingAnimation(size, isMobile, isSmallMobile),
+                ),
+              ],
+            ),
+    ),
   );
 }
   Widget _buildMatrixBackground(Size size) {
