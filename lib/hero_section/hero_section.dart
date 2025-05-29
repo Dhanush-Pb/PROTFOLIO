@@ -111,72 +111,85 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 768;
-    final isTablet = size.width >= 768 && size.width < 1024;
-    final isSmallMobile = size.width < 480;
+// CHANGE 1: Update the main Container to use SingleChildScrollView for mobile
+Widget build(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  final isMobile = size.width < 768;
+  final isTablet = size.width >= 768 && size.width < 1024;
+  final isSmallMobile = size.width < 480;
 
-    return Container(
-      height: size.height,
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          center: const Alignment(0.3, -0.5),
-          radius: 1.5,
-          colors: [
-            const Color(0xFF1A1B3A).withOpacity(0.8),
-            const Color(0xFF0A0B1E).withOpacity(0.9),
-            const Color(0xFF000000),
-          ],
-        ),
-      ),
-      child: Stack(
-        children: [
-          // Animated Matrix Background
-          _buildMatrixBackground(size),
-
-          // Floating Particles
-          _buildFloatingParticles(size),
-
-          // Neural Network Lines
-          _buildNeuralNetwork(size),
-
-          // Main Content
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: isSmallMobile ? 16 : (isMobile ? 20 : 80)),
-            child: isMobile
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Mobile: Show floating animation first
-                      _buildFloatingAnimation(size, isMobile, isSmallMobile),
-                      const SizedBox(height: 40),
-                      // Then show text content
-                      _buildTextContent(
-                          size, isMobile, isTablet, isSmallMobile),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: _buildTextContent(
-                            size, isMobile, isTablet, isSmallMobile),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: _buildFloatingAnimation(
-                            size, isMobile, isSmallMobile),
-                      ),
-                    ],
-                  ),
-          ),
+  return Container(
+    height: size.height,
+    decoration: BoxDecoration(
+      gradient: RadialGradient(
+        center: const Alignment(0.3, -0.5),
+        radius: 1.5,
+        colors: [
+          const Color(0xFF1A1B3A).withOpacity(0.8),
+          const Color(0xFF0A0B1E).withOpacity(0.9),
+          const Color(0xFF000000),
         ],
       ),
-    );
-  }
+    ),
+    child: Stack(
+      children: [
+        // Animated Matrix Background
+        _buildMatrixBackground(size),
 
+        // Floating Particles
+        _buildFloatingParticles(size),
+
+        // Neural Network Lines
+        _buildNeuralNetwork(size),
+
+        // CHANGED: Wrap main content in SingleChildScrollView for mobile
+        isMobile 
+          ? SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Container(
+                constraints: BoxConstraints(minHeight: size.height),
+                child: _buildMainContent(size, isMobile, isTablet, isSmallMobile),
+              ),
+            )
+          : _buildMainContent(size, isMobile, isTablet, isSmallMobile),
+      ],
+    ),
+  );
+}
+// CHANGE 2: Extract main content into separate method with better spacing
+Widget _buildMainContent(Size size, bool isMobile, bool isTablet, bool isSmallMobile) {
+  return Padding(
+    padding: EdgeInsets.only(
+      left: isSmallMobile ? 16 : (isMobile ? 20 : 80),
+      right: isSmallMobile ? 16 : (isMobile ? 20 : 80),
+      top: isMobile ? 40 : 0, // Add top padding for mobile
+      bottom: isMobile ? 60 : 0, // Add bottom padding for mobile
+    ),
+    child: isMobile
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Mobile: Show floating animation first
+              _buildFloatingAnimation(size, isMobile, isSmallMobile),
+              SizedBox(height: isSmallMobile ? 30 : 40),
+              // Then show text content
+              _buildTextContent(size, isMobile, isTablet, isSmallMobile),
+            ],
+          )
+        : Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: _buildTextContent(size, isMobile, isTablet, isSmallMobile),
+              ),
+              Expanded(
+                flex: 2,
+                child: _buildFloatingAnimation(size, isMobile, isSmallMobile),
+              ),
+            ],
+          ),
+  );
+}
   Widget _buildMatrixBackground(Size size) {
     return AnimatedBuilder(
       animation: _matrixController,
@@ -212,382 +225,374 @@ class _HeroSectionState extends State<HeroSection>
       },
     );
   }
+// CHANGE 3: Update _buildTextContent method - fix the buttons section spacing
+Widget _buildTextContent(Size size, bool isMobile, bool isTablet, bool isSmallMobile) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+    children: [
+      AnimationLimiter(
+        child: Column(
+          crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          children: AnimationConfiguration.toStaggeredList(
+            duration: const Duration(milliseconds: 800),
+            childAnimationBuilder: (widget) => SlideAnimation(
+              horizontalOffset: -50.0,
+              child: FadeInAnimation(child: widget),
+            ),
+            children: [
+              const SizedBox(height: 20),
 
-  Widget _buildTextContent(
-      Size size, bool isMobile, bool isTablet, bool isSmallMobile) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment:
-          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        AnimationLimiter(
-          child: Column(
-            crossAxisAlignment:
-                isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-            children: AnimationConfiguration.toStaggeredList(
-              duration: const Duration(milliseconds: 800),
-              childAnimationBuilder: (widget) => SlideAnimation(
-                horizontalOffset: -50.0,
-                child: FadeInAnimation(child: widget),
-              ),
-              children: [
-                const SizedBox(height: 20),
-
-                Text(
-                  'Hello, I\'m',
-                  style: GoogleFonts.poppins(
-                    fontSize: isSmallMobile
-                        ? 20
-                        : (isMobile ? 24 : (isTablet ? 28 : 32)),
-                    color: Colors.white.withOpacity(0.8),
-                    fontWeight: FontWeight.w300,
-                  ),
-                  textAlign: isMobile ? TextAlign.center : TextAlign.start,
+              Text(
+                'Hello, I\'m',
+                style: GoogleFonts.poppins(
+                  fontSize: isSmallMobile ? 20 : (isMobile ? 24 : (isTablet ? 28 : 32)),
+                  color: Colors.white.withOpacity(0.8),
+                  fontWeight: FontWeight.w300,
                 ),
-                const SizedBox(height: 8),
+                textAlign: isMobile ? TextAlign.center : TextAlign.start,
+              ),
+              const SizedBox(height: 8),
 
-                // Glowing Name with Holographic Effect
-                AnimatedBuilder(
-                  animation: _pulseAnimation,
-                  builder: (context, child) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF6C63FF)
-                                .withOpacity(0.3 * _pulseAnimation.value),
-                            blurRadius: 30 * _pulseAnimation.value,
-                            spreadRadius: 5 * _pulseAnimation.value,
-                          ),
+              // Glowing Name with Holographic Effect
+              AnimatedBuilder(
+                animation: _pulseAnimation,
+                builder: (context, child) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6C63FF).withOpacity(0.3 * _pulseAnimation.value),
+                          blurRadius: 30 * _pulseAnimation.value,
+                          spreadRadius: 5 * _pulseAnimation.value,
+                        ),
+                      ],
+                    ),
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [
+                          Color(0xFF6C63FF),
+                          Color(0xFF6C63FF),
+                          Color(0xFF00D4FF),
+                          Color.fromARGB(255, 9, 181, 233),
                         ],
+                        stops: [0.0, 0.3, 0.7, 1.0],
+                      ).createShader(bounds),
+                      child: Text(
+                        'Dhanush',
+                        style: GoogleFonts.poppins(
+                          fontSize: isSmallMobile ? 28 : (isMobile ? 36 : (isTablet ? 48 : 56)),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2,
+                        ),
+                        textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Enhanced Animated Text with Cyber Effects
+              SizedBox(
+                width: isMobile ? size.width - (isSmallMobile ? 32 : 40) : null,
+                child: Wrap(
+                  alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(
+                      'I\'m a ',
+                      style: GoogleFonts.poppins(
+                        fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.transparent,
+                            const Color(0xFF00D4FF).withOpacity(0.05),
+                            const Color(0xFF6C63FF).withOpacity(0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFF00D4FF).withOpacity(0.2),
+                          width: 1,
+                        ),
                       ),
                       child: ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           colors: [
-                            Color(0xFF6C63FF),
-                            Color(0xFF6C63FF),
                             Color(0xFF00D4FF),
-                            Color.fromARGB(255, 9, 181, 233),
+                            Color(0xFF6C63FF),
+                            Color(0xFF4ECDC4),
                           ],
-                          stops: [0.0, 0.3, 0.7, 1.0],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ).createShader(bounds),
-                        child: Text(
-                          'Dhanush',
-                          style: GoogleFonts.poppins(
-                            fontSize: isSmallMobile
-                                ? 28
-                                : (isMobile ? 36 : (isTablet ? 48 : 56)),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 2,
-                          ),
-                          textAlign:
-                              isMobile ? TextAlign.center : TextAlign.start,
+                        child: AnimatedTextKit(
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              'Software Engineer',
+                              textStyle: GoogleFonts.poppins(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 8.0,
+                                    color: const Color(0xFF00D4FF).withOpacity(0.3),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 80),
+                            ),
+                            TypewriterAnimatedText(
+                              'Full-Stack Flutter developer',
+                              textStyle: GoogleFonts.firaCode(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: const Color(0xFF6C63FF).withOpacity(0.4),
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 75),
+                            ),
+                            TypewriterAnimatedText(
+                              'App & Game Functionality Builder',
+                              textStyle: GoogleFonts.poppins(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 8.0,
+                                    color: const Color(0xFF00D4FF).withOpacity(0.3),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 85),
+                            ),
+                            TypewriterAnimatedText(
+                              'UI/UX Focused Developer',
+                              textStyle: GoogleFonts.poppins(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 9.0,
+                                    color: const Color(0xFF6C63FF).withOpacity(0.35),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 80),
+                            ),
+                            TypewriterAnimatedText(
+                              'Animation & Interaction Designer',
+                              textStyle: GoogleFonts.poppins(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 8.0,
+                                    color: const Color.fromARGB(255, 110, 103, 255).withOpacity(0.3),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 85),
+                            ),
+                            TypewriterAnimatedText(
+                              'AI Integration Expert',
+                              textStyle: GoogleFonts.poppins(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: const Color(0xFF00D4FF).withOpacity(0.4),
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 80),
+                            ),
+                            TypewriterAnimatedText(
+                              'Interactive Experience Designer',
+                              textStyle: GoogleFonts.firaCode(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 9.0,
+                                    color: const Color(0xFF4ECDC4).withOpacity(0.4),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 75),
+                            ),
+                            TypewriterAnimatedText(
+                              'Next-Gen App Architect',
+                              textStyle: GoogleFonts.firaCode(
+                                fontSize: isSmallMobile ? 16 : (isMobile ? 18 : (isTablet ? 20 : 24)),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: const Color(0xFF00D4FF).withOpacity(0.4),
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              speed: const Duration(milliseconds: 78),
+                            ),
+                          ],
+                          repeatForever: true,
+                          pause: const Duration(milliseconds: 2000),
+                          displayFullTextOnTap: true,
+                          stopPauseOnTap: true,
                         ),
                       ),
-                    );
-                  },
+                    )
+                  ],
                 ),
-                const SizedBox(height: 16),
+              ),
+              const SizedBox(height: 24),
 
-                // Enhanced Animated Text with Cyber Effects
-                SizedBox(
-                  width:
-                      isMobile ? size.width - (isSmallMobile ? 32 : 40) : null,
-                  child: Wrap(
-                    alignment:
-                        isMobile ? WrapAlignment.center : WrapAlignment.start,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        'I\'m a ',
-                        style: GoogleFonts.poppins(
-                          fontSize: isSmallMobile
-                              ? 16
-                              : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Colors.transparent,
-                              const Color(0xFF00D4FF).withOpacity(0.05),
-                              const Color(0xFF6C63FF).withOpacity(0.05),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF00D4FF).withOpacity(0.2),
-                            width: 1,
-                          ),
-                        ),
-                        child: ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [
-                              Color(0xFF00D4FF),
-                              Color(0xFF6C63FF),
-                              Color(0xFF4ECDC4),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ).createShader(bounds),
-                          child: AnimatedTextKit(
-                            animatedTexts: [
-                              TypewriterAnimatedText(
-                                'Software Engineer',
-                                textStyle: GoogleFonts.poppins(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 8.0,
-                                      color: const Color(0xFF00D4FF)
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 80),
-                              ),
-                              TypewriterAnimatedText(
-                                'Full-Stack Flutter developer',
-                                textStyle: GoogleFonts.firaCode(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.8,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 10.0,
-                                      color: const Color(0xFF6C63FF)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 75),
-                              ),
-                              TypewriterAnimatedText(
-                                'App & Game Functionality Builder',
-                                textStyle: GoogleFonts.poppins(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 8.0,
-                                      color: const Color(0xFF00D4FF)
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 85),
-                              ),
-                              TypewriterAnimatedText(
-                                'UI/UX Focused Developer',
-                                textStyle: GoogleFonts.poppins(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 9.0,
-                                      color: const Color(0xFF6C63FF)
-                                          .withOpacity(0.35),
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 80),
-                              ),
-                              TypewriterAnimatedText(
-                                'Animation & Interaction Designer',
-                                textStyle: GoogleFonts.poppins(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 8.0,
-                                      color: const Color.fromARGB(
-                                              255, 110, 103, 255)
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 85),
-                              ),
-                              TypewriterAnimatedText(
-                                'AI Integration Expert',
-                                textStyle: GoogleFonts.poppins(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 10.0,
-                                      color: const Color(0xFF00D4FF)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 80),
-                              ),
-                              TypewriterAnimatedText(
-                                'Interactive Experience Designer',
-                                textStyle: GoogleFonts.firaCode(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.8,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 9.0,
-                                      color: const Color(0xFF4ECDC4)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 75),
-                              ),
-                              TypewriterAnimatedText(
-                                'Next-Gen App Architect',
-                                textStyle: GoogleFonts.firaCode(
-                                  fontSize: isSmallMobile
-                                      ? 16
-                                      : (isMobile ? 18 : (isTablet ? 20 : 24)),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.8,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 10.0,
-                                      color: const Color(0xFF00D4FF)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                speed: const Duration(milliseconds: 78),
-                              ),
-                            ],
-                            repeatForever: true,
-                            pause: const Duration(milliseconds: 2000),
-                            displayFullTextOnTap: true,
-                            stopPauseOnTap: true,
-                          ),
-                        ),
-                      )
-                    ],
+              // Enhanced Description with Typewriter Effect
+              Container(
+                width: isMobile ? size.width - (isSmallMobile ? 32 : 40) : null,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFF6C63FF).withOpacity(0.2),
                   ),
-                ),
-                const SizedBox(height: 24),
-
-                // Enhanced Description with Typewriter Effect
-                Container(
-                  width:
-                      isMobile ? size.width - (isSmallMobile ? 32 : 40) : null,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color(0xFF6C63FF).withOpacity(0.2),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF6C63FF).withOpacity(0.1),
-                        blurRadius: 20,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    'Engineering intelligent, scalable Flutter applications that turn innovative ideas into seamless digital experiences—powered by precision, creativity, and advanced AI/ML integration.Dedicated to building future-ready solutions that merge design elegance with engineering excellence.',
-                    style: GoogleFonts.poppins(
-                      fontSize: isSmallMobile
-                          ? 13
-                          : (isMobile ? 14 : (isTablet ? 16 : 18)),
-                      color: Colors.white.withOpacity(0.8),
-                      height: 1.6,
-                    ),
-                    textAlign: isMobile ? TextAlign.center : TextAlign.start,
-                  ),
-                ),
-                const SizedBox(height: 30),
-
-                // Tech Stack Indicators
-                _buildTechStack(isMobile, isSmallMobile),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: isMobile
-                      ? MainAxisAlignment.center
-                      : MainAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: _buildGlowButton(
-                        'Explore Projects',
-                        Icons.rocket_launch,
-                        () {
-                          _scrollToProjects();
-                        },
-                        isPrimary: true,
-                        isSmallMobile: isSmallMobile,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Flexible(
-                      child: _buildGlowButton(
-                        'Download CV',
-                        Icons.cloud_download,
-                        () {
-                          _downloadCV();
-                        },
-                        isPrimary: false,
-                        isSmallMobile: isSmallMobile,
-                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF6C63FF).withOpacity(0.1),
+                      blurRadius: 20,
+                      spreadRadius: 1,
                     ),
                   ],
                 ),
-               
-              ],
-            ),
+                child: Text(
+                  'Engineering intelligent, scalable Flutter applications that turn innovative ideas into seamless digital experiences—powered by precision, creativity, and advanced AI/ML integration.Dedicated to building future-ready solutions that merge design elegance with engineering excellence.',
+                  style: GoogleFonts.poppins(
+                    fontSize: isSmallMobile ? 13 : (isMobile ? 14 : (isTablet ? 16 : 18)),
+                    color: Colors.white.withOpacity(0.8),
+                    height: 1.6,
+                  ),
+                  textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                ),
+              ),
+              SizedBox(height: isSmallMobile ? 20 : 30),
+
+              // Tech Stack Indicators
+              _buildTechStack(isMobile, isSmallMobile),
+              SizedBox(height: isSmallMobile ? 25 : 30), // CHANGED: Increased spacing
+
+              // CHANGED: Better button layout for mobile
+              Container(
+                width: isMobile ? double.infinity : null,
+                child: isMobile
+                    ? Column(
+                        children: [
+                          // Stack buttons vertically on small screens
+                          SizedBox(
+                            width: double.infinity,
+                            child: _buildGlowButton(
+                              'Explore Projects',
+                              Icons.rocket_launch,
+                              () {
+                                _scrollToProjects();
+                              },
+                              isPrimary: true,
+                              isSmallMobile: isSmallMobile,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: _buildGlowButton(
+                              'Download CV',
+                              Icons.cloud_download,
+                              () {
+                                _downloadCV();
+                              },
+                              isPrimary: false,
+                              isSmallMobile: isSmallMobile,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: _buildGlowButton(
+                              'Explore Projects',
+                              Icons.rocket_launch,
+                              () {
+                                _scrollToProjects();
+                              },
+                              isPrimary: true,
+                              isSmallMobile: isSmallMobile,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Flexible(
+                            child: _buildGlowButton(
+                              'Download CV',
+                              Icons.cloud_download,
+                              () {
+                                _downloadCV();
+                              },
+                              isPrimary: false,
+                              isSmallMobile: isSmallMobile,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ],
           ),
         ),
-          const SizedBox(height: 100),
-      ],
-    );
-  }
+      ),
+      // CHANGED: Add extra bottom spacing for mobile
+      SizedBox(height: isMobile ? 40 : 100),
+    ],
+  );
+}
 
   Widget _buildTechStack(bool isMobile, bool isSmallMobile) {
     final techIcons = [
