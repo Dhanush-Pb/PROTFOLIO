@@ -76,7 +76,7 @@ class _HeroSectionState extends State<HeroSection>
     try {
       // Your Google Drive CV link
       const String cvUrl =
-          'https://drive.google.com/file/d/1eeLfi0a6ojXciA6YEXKKIXbcQZIm15Mx/view';
+          'https://drive.google.com/file/d/1eeLfi0a6ojXciA6YEXKKIXbcQZIm15Mx/view?usp=sharing';
 
       // Show loading message
       ScaffoldMessenger.of(context).showSnackBar(
